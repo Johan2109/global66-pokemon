@@ -9,7 +9,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close"]); // CORRECTO: Guardamos el emit en una constante
+const emit = defineEmits(["close"]);
 
 const pokemon = computed(() => ({
   ...props.pokemon,
@@ -32,7 +32,7 @@ const sharePokemon = () => {
       text: "📋 La información del Pokémon se copió al portapapeles.",
       confirmButtonColor: "#3085d6",
     }).then(() => {
-      emit("close"); // CORRECTO: Cerramos el modal después del mensaje
+      emit("close");
     });
   });
 };
@@ -41,47 +41,47 @@ const sharePokemon = () => {
 <template>
   <div
     v-if="pokemon"
-    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-md p-4"
   >
     <div
-      class="bg-white p-6 rounded-lg shadow-lg w-96 flex flex-col items-center"
+      class="bg-white p-6 rounded-xl shadow-xl w-full max-w-sm transform transition-all scale-95 opacity-0 animate-fadeIn flex flex-col items-center"
     >
       <!-- Imagen del Pokémon -->
       <img
         :src="pokemon.image"
         :alt="pokemon.name"
-        class="w-48 h-48 object-contain mx-auto"
+        class="w-40 h-40 object-contain mx-auto drop-shadow-lg"
       />
 
       <!-- Nombre del Pokémon -->
-      <h2 class="text-2xl font-bold mt-4 capitalize text-center text-gray-800">
+      <h2
+        class="text-3xl font-bold mt-4 capitalize text-center bg-gradient-to-r from-blue-500 to-indigo-600 text-transparent bg-clip-text"
+      >
         {{ pokemon.name }}
       </h2>
 
       <!-- Detalles -->
-      <p class="text-gray-600 mt-2">
-        <strong>Altura:</strong> {{ pokemon.height / 10 }} m
-      </p>
-      <p class="text-gray-600">
-        <strong>Peso:</strong> {{ pokemon.weight / 10 }} kg
-      </p>
-      <p class="text-gray-600">
-        <strong>Tipos:</strong>
-        {{ pokemon.types.length ? pokemon.types.join(", ") : "Desconocido" }}
-      </p>
+      <div class="mt-3 text-gray-700 text-center space-y-1">
+        <p><strong>Altura:</strong> {{ pokemon.height / 10 }} m</p>
+        <p><strong>Peso:</strong> {{ pokemon.weight / 10 }} kg</p>
+        <p>
+          <strong>Tipos:</strong>
+          {{ pokemon.types.length ? pokemon.types.join(", ") : "Desconocido" }}
+        </p>
+      </div>
 
-      <!-- Botones alineados en la parte inferior -->
-      <div class="flex justify-between w-full mt-4">
+      <!-- Botones alineados -->
+      <div class="flex justify-between w-full mt-5 gap-3">
         <button
           @click="sharePokemon"
-          class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all flex-1 mr-2"
+          class="flex-1 bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-all"
         >
           🔗 Compartir
         </button>
 
         <button
           @click="emit('close')"
-          class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all flex-1 ml-2"
+          class="flex-1 bg-red-500 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-red-600 transition-all"
         >
           ✖ Cerrar
         </button>
@@ -89,3 +89,21 @@ const sharePokemon = () => {
     </div>
   </div>
 </template>
+
+<style>
+/* Animación para el modal */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+</style>
